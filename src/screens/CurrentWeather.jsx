@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
-import { AppIconSun } from '@/components/core/Icon';
+import { AppIconSun } from '@app-ui/Icon';
 const CurrentWeather = () => {
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -27,26 +27,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   temp: {
     color: 'black',
-    fontSize: 48,
+    fontSize: 48
   },
   feels: { fontSize: 30, color: 'black' },
   highLowWrapper: { flexDirection: 'row' },
   highLow: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 20
   },
   bodyWrapper: {
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     paddingLeft: 20,
-    marginBottom: 40,
+    marginBottom: 40
   },
   description: { fontSize: 48 },
-  message: { fontSize: 30 },
+  message: { fontSize: 30 }
 });
 
 export default CurrentWeather;
