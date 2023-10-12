@@ -1,27 +1,42 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import RowText from '../components/RowText';
+import { weatherType } from '../utils/weatherType';
+import { Feather } from '@expo/vector-icons';
 
-import { AppIconSun } from '@app-ui/Icon';
-const CurrentWeather = () => {
+const CurrentWeather = ({ weatherData }) => {
+  const {
+    main: { temp, feels_like, temp_max, temp_min },
+    weather
+  } = weatherData;
+  const weatherCondition = weather[0].main;
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[
+        styles.wrapper,
+        { backgroundColor: weatherType[weatherCondition].backgroundColor }
+      ]}
+    >
       <View style={styles.container}>
-        <AppIconSun size={100} />
-        <Text style={styles.temp}>6</Text>
-        <Text style={styles.feels}>Feels like 5</Text>
+        <Feather
+          name={weatherType[weatherCondition].icon}
+          size={100}
+          color={'white'}
+        />
+        <Text style={styles.temp}>{temp}</Text>
+        <Text style={styles.feels}>{`Feels like ${feels_like}`}</Text>
         <RowText
           containerStyle={styles.highLowWrapper}
-          messageOne={'High: 8'}
-          messageTwo={'Low: 6'}
+          messageOne={`High: ${temp_max}° `}
+          messageTwo={`Low: ${temp_min}°`}
           messageOneStyle={styles.highLow}
           messageTwoStyle={styles.highLow}
         />
       </View>
       <RowText
         containerStyle={styles.bodyWrapper}
-        messageOne={"It's Sunny"}
-        messageTwo={"It's perfect t-shirt weather"}
+        messageOne={weather[0].description}
+        messageTwo={weatherType[weatherCondition].message}
         messageOneStyle={styles.description}
         messageTwoStyle={styles.message}
       />

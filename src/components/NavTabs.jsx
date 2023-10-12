@@ -5,7 +5,7 @@ import City from '@app-screens/City';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 import { Feather } from '@expo/vector-icons';
-const NavTabs = () => {
+const NavTabs = ({ weather }) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -26,31 +26,34 @@ const NavTabs = () => {
     >
       <Tab.Screen
         name={'Current'}
-        component={CurrentWeather}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather name={'droplet'} color={focused ? 'tomato' : 'black'} />
           )
         }}
-      />
+      >
+        {() => <CurrentWeather weatherData={weather.list[0]} />}
+      </Tab.Screen>
       <Tab.Screen
         name={'Upcoming'}
-        component={UpcomingWeather}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather name={'clock'} color={focused ? 'tomato' : 'black'} />
           )
         }}
-      />
+      >
+        {() => <UpcomingWeather weatherData={weather.list} />}
+      </Tab.Screen>
       <Tab.Screen
         name={'City'}
-        component={City}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather name={'home'} color={focused ? 'tomato' : 'black'} />
           )
         }}
-      />
+      >
+        {() => <City weatherData={weather.city} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
