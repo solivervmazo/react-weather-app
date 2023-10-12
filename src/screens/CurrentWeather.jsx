@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import RowText from '../components/RowText';
 
 import { AppIconSun } from '@app-ui/Icon';
 const CurrentWeather = () => {
@@ -9,15 +10,21 @@ const CurrentWeather = () => {
         <AppIconSun size={100} />
         <Text style={styles.temp}>6</Text>
         <Text style={styles.feels}>Feels like 5</Text>
-        <View style={styles.highLowWrapper}>
-          <Text style={styles.highLow}>High: 8</Text>
-          <Text style={styles.highLow}>Low: 6</Text>
-        </View>
+        <RowText
+          containerStyle={styles.highLowWrapper}
+          messageOne={'High: 8'}
+          messageTwo={'Low: 6'}
+          messageOneStyle={styles.highLow}
+          messageTwoStyle={styles.highLow}
+        />
       </View>
-      <View style={styles.bodyWrapper}>
-        <Text style={styles.highLow}>It's Sunny</Text>
-        <Text style={styles.highLow}>It's perfect t-shirt weather</Text>
-      </View>
+      <RowText
+        containerStyle={styles.bodyWrapper}
+        messageOne={"It's Sunny"}
+        messageTwo={"It's perfect t-shirt weather"}
+        messageOneStyle={styles.description}
+        messageTwoStyle={styles.message}
+      />
     </SafeAreaView>
   );
 };
