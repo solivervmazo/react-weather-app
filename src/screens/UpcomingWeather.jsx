@@ -11,7 +11,7 @@ import {
 import ForecastCard from '../components/ForecastCard';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const UpcomingWeather = ({ weatherData }) => {
+const UpcomingWeather = ({ weatherData, imgBg }) => {
   const renderItem = ({ item }) => (
     <ForecastCard
       conditon={item.weather[0].main}
@@ -28,14 +28,20 @@ const UpcomingWeather = ({ weatherData }) => {
       start={{ x: 0, y: 1 }}
       end={{ x: 1, y: 0 }}
     >
-      <SafeAreaView style={styles.wrapper}>
-        <FlatList
-          data={weatherData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.dt_txt}
-          initialNumToRender={5}
-        />
-      </SafeAreaView>
+      <ImageBackground
+        source={{ uri: imgBg }}
+        style={{ flex: 1 }}
+        imageStyle={{ resizeMode: 'cover' }}
+      >
+        <SafeAreaView style={styles.wrapper}>
+          <FlatList
+            data={weatherData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.dt_txt}
+            initialNumToRender={5}
+          />
+        </SafeAreaView>
+      </ImageBackground>
     </LinearGradient>
   );
 };

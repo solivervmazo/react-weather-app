@@ -1,12 +1,13 @@
-import React from 'react';
-import CurrentWeather from '@app-screens/CurrentWeather';
-import UpcomingWeather from '@app-screens/UpcomingWeather';
-import City from '@app-screens/City';
+import React, { useState } from 'react';
+import CurrentWeather from '../screens/CurrentWeather';
+import UpcomingWeather from '../screens/UpcomingWeather';
+import City from '../screens/City';
+import AppSettings from '../screens/AppSettings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as ImagePicker from 'expo-image-picker';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,20 @@ const TabBarIcon = ({ iconName, focused }) => {
 };
 
 const NavTabs = ({ weather }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert('You did not select any image.');
+    }
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -57,6 +72,7 @@ const NavTabs = ({ weather }) => {
             weatherData={weather.list[0]}
             cityInfo={weather.city}
             weatherForecast={weather.list}
+            imgBg={selectedImage}
           />
         )}
       </Tab.Screen>
@@ -68,7 +84,9 @@ const NavTabs = ({ weather }) => {
           )
         }}
       >
-        {() => <UpcomingWeather weatherData={weather.list} />}
+        {() => (
+          <UpcomingWeather weatherData={weather.list} imgBg={selectedImage} />
+        )}
       </Tab.Screen>
       <Tab.Screen
         name={'Settings'}
@@ -78,7 +96,9 @@ const NavTabs = ({ weather }) => {
           )
         }}
       >
-        {() => <City weatherData={weather.city} />}
+        {() => (
+          <AppSettings changeImage={pickImageAsync} imgBg={selectedImage} />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -12,7 +12,7 @@ import ForecastCardList from '../components/ForecastCardList';
 import ForecastNowCard from '../components/ForecastNowCard';
 import sizes from '../styles/sizes';
 import { weatherType } from '../utils/weatherType';
-const CurrentWeather = ({ weatherData, cityInfo, weatherForecast }) => {
+const CurrentWeather = ({ weatherData, cityInfo, weatherForecast, imgBg }) => {
   const { name: cityName, country: cityCountry } = cityInfo;
   const weatherConditon = weatherData?.weather?.[0]?.main || 'Clear';
   return (
@@ -23,24 +23,30 @@ const CurrentWeather = ({ weatherData, cityInfo, weatherForecast }) => {
       end={{ x: 1, y: 0 }}
     >
       <ImageBackground
-        source={weatherType[weatherConditon].bg}
+        source={{ uri: imgBg }}
         style={{ flex: 1 }}
-        imageStyle={{ resizeMode: 'cover', opacity: 0.3 }}
+        imageStyle={{ resizeMode: 'cover' }}
       >
-        <SafeAreaView style={[styles.wrapper]}>
-          <View style={styles.container}>
-            <View style={styles.locationContainer}>
-              <Text style={styles.locationText}>
-                {` ${cityName}, ${cityCountry}`}
-              </Text>
-            </View>
-            <ForecastNowCard weatherData={weatherData} />
+        <ImageBackground
+          source={weatherType[weatherConditon].bg}
+          style={{ flex: 1 }}
+          imageStyle={{ resizeMode: 'cover', opacity: 0.3 }}
+        >
+          <SafeAreaView style={[styles.wrapper]}>
+            <View style={styles.container}>
+              <View style={styles.locationContainer}>
+                <Text style={styles.locationText}>
+                  {` ${cityName}, ${cityCountry}`}
+                </Text>
+              </View>
+              <ForecastNowCard weatherData={weatherData} />
 
-            <View style={{ flex: 2 }}>
-              <ForecastCardList data={weatherForecast} horizontal={true} />
+              <View style={{ flex: 2 }}>
+                <ForecastCardList data={weatherForecast} horizontal={true} />
+              </View>
             </View>
-          </View>
-        </SafeAreaView>
+          </SafeAreaView>
+        </ImageBackground>
       </ImageBackground>
     </LinearGradient>
   );
