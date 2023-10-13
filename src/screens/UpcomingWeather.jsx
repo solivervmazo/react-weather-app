@@ -8,50 +8,44 @@ import {
   ImageBackground
 } from 'react-native';
 
-import ListItem from '../components/ListItem';
+import ForecastCard from '../components/ForecastCard';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const UpcomingWeather = ({ weatherData }) => {
   const renderItem = ({ item }) => (
-    <ListItem
+    <ForecastCard
       conditon={item.weather[0].main}
       dt_txt={item.dt_txt}
       min={item.main.temp_min}
       max={item.main.temp_max}
+      temp={item.main.temp}
     />
   );
   return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/ucw.jpg')}
-        style={styles.image}
-      >
-        <Text>Upcommin Weather</Text>
+    <LinearGradient
+      colors={['purple', 'white']}
+      style={styles.background}
+      start={{ x: 0, y: 1 }}
+      end={{ x: 1, y: 0 }}
+    >
+      <SafeAreaView style={styles.wrapper}>
         <FlatList
           data={weatherData}
           renderItem={renderItem}
           keyExtractor={(item) => item.dt_txt}
+          initialNumToRender={5}
         />
-      </ImageBackground>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  background: { flex: 1 },
+  wrapper: {
     flex: 1,
-    backgroundColor: 'royalblue'
-  },
-
-  temp: {
-    color: 'white',
-    fontSize: 20
-  },
-  date: {
-    color: 'white',
-    fontSize: 15
-  },
-  image: {
-    flex: 1
+    paddingBottom: 70,
+    paddingTop: StatusBar.currentHeight || 0
   }
 });
 

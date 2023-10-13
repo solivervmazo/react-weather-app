@@ -4,32 +4,17 @@ import {
   Text,
   View,
   SafeAreaView,
-  FlatList,
   StatusBar,
   ImageBackground
 } from 'react-native';
-import RowText from '../components/RowText';
-import { weatherType } from '../utils/weatherType';
-import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
-import ListItem from '../components/ListItem';
+import ForecastCardList from '../components/ForecastCardList';
+import ForecastNowCard from '../components/ForecastNowCard';
+import sizes from '../styles/sizes';
+import { weatherType } from '../utils/weatherType';
 const CurrentWeather = ({ weatherData, cityInfo, weatherForecast }) => {
-  const {
-    main: { temp, feels_like, temp_max, temp_min },
-    weather
-  } = weatherData;
-  const { name, country, population, sunrise, sunset } = cityInfo;
-  const weatherCondition = weather[0].main;
-  const renderItem = ({ item }) => (
-    <ListItem
-      conditon={item.weather[0].main}
-      dt_txt={item.dt_txt}
-      temp={item.main.temp}
-      min={item.main.temp_min}
-      max={item.main.temp_max}
-    />
-  );
+  const { name: cityName, country: cityCountry } = cityInfo;
+  const weatherConditon = weatherData?.weather?.[0]?.main || 'Clear';
   return (
     <LinearGradient
       colors={['purple', 'white']}
@@ -37,75 +22,26 @@ const CurrentWeather = ({ weatherData, cityInfo, weatherForecast }) => {
       start={{ x: 0, y: 1 }}
       end={{ x: 1, y: 0 }}
     >
-      <SafeAreaView style={[styles.wrapper]}>
-        <View style={styles.container}>
-          <View
-            style={{
-              flexGrow: 1,
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 15, marginBottom: 50 }}>
-              {` ${name}, ${country}`}
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Feather
-                name={weatherType[weatherCondition].icon}
-                size={50}
-                color={'white'}
-              />
-              <Text style={{ color: 'white', fontSize: 40 }}>
-                {` ${weather[0].description}`}
+      <ImageBackground
+        source={weatherType[weatherConditon].bg}
+        style={{ flex: 1 }}
+        imageStyle={{ resizeMode: 'cover', opacity: 0.3 }}
+      >
+        <SafeAreaView style={[styles.wrapper]}>
+          <View style={styles.container}>
+            <View style={styles.locationContainer}>
+              <Text style={styles.locationText}>
+                {` ${cityName}, ${cityCountry}`}
               </Text>
             </View>
-            <Text style={{ color: 'white', fontSize: 20 }}>
-              {weatherType[weatherCondition].message}
-            </Text>
-            <BlurView
-              intensity={100}
-              style={{
-                marginTop: 15,
-                borderRadius: 15,
-                overflow: 'hidden'
-              }}
-            >
-              <ImageBackground
-                imageStyle={{ opacity: 0.3 }}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  padding: 25
-                }}
-              >
-                <Text style={styles.temp}>{`${Math.round(temp)}°`}</Text>
-                <View>
-                  <Text style={styles.highLow}>{`High: ${Math.round(
-                    temp_max
-                  )}° `}</Text>
-                  <Text style={styles.highLow}>{`Low: ${Math.round(
-                    temp_min
-                  )}°`}</Text>
-                  <Text style={styles.highLow}>{`Feels like ${Math.round(
-                    feels_like
-                  )}°`}</Text>
-                </View>
-              </ImageBackground>
-            </BlurView>
+            <ForecastNowCard weatherData={weatherData} />
+
+            <View style={{ flex: 2 }}>
+              <ForecastCardList data={weatherForecast} horizontal={true} />
+            </View>
           </View>
-          <View style={{ flex: 2 }}>
-            <FlatList
-              horizontal={true}
-              data={weatherForecast}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.dt_txt}
-              style={{}}
-              show
-            />
-          </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ImageBackground>
     </LinearGradient>
   );
 };
@@ -122,25 +58,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  temp: {
+  locationContainer: {
+    flexShrink: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20
+  },
+  locationText: {
     color: 'white',
-    fontSize: 100,
-    fontWeight: 'bold'
-  },
-  feels: { fontSize: 30, color: 'white' },
-  highLowWrapper: { flexDirection: 'row' },
-  highLow: {
-    color: 'white',
-    fontSize: 20
-  },
-  bodyWrapper: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
-    paddingLeft: 20,
-    marginBottom: 40
-  },
-  description: { fontSize: 48 },
-  message: { fontSize: 30 }
+    fontSize: sizes.medium(),
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5
+  }
 });
 
 export default CurrentWeather;
